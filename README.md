@@ -55,13 +55,13 @@ const config = {
   issuer: '<YOUR_ISSUER_URL>',
   clientId: '<YOUR_CLIENT_ID>',
   redirectUrl: '<YOUR_REDIRECT_URL>',
-  scopes: `<YOUR_SCOPES_ARRAY>`
+  scopes: '<YOUR_SCOPES_ARRAY>'
 };
 
 const result = await authorize(config);
 ```
 
-#### `config`
+#### config
 
 This is your configuration object for the client. The config is passed into each of the methods
 with optional overrides.
@@ -74,7 +74,7 @@ with optional overrides.
   Must be string values! E.g. setting `additionalParameters: { hello: 'world', foo: 'bar' }` would add
   `hello=world&foo=bar` to the authorization request.
 
-#### `result`
+#### result
 
 This is the result from the auth server
 
@@ -97,7 +97,7 @@ const config = {
   issuer: '<YOUR_ISSUER_URL>',
   clientId: '<YOUR_CLIENT_ID>',
   redirectUrl: '<YOUR_REDIRECT_URL>',
-  scopes: `<YOUR_SCOPES_ARRAY>`,
+  scopes: '<YOUR_SCOPES_ARRAY>',
 };
 
 const result = await refresh({
@@ -117,12 +117,12 @@ const config = {
   issuer: '<YOUR_ISSUER_URL>',
   clientId: '<YOUR_CLIENT_ID>',
   redirectUrl: '<YOUR_REDIRECT_URL>',
-  scopes: `<YOUR_SCOPES_ARRAY>`,
+  scopes: '<YOUR_SCOPES_ARRAY>',
 };
 
 const result = await revoke({
   ...config,
-  refreshToken: `<REFRESH_TOKEN>`
+  tokenToRevoke: `<TOKEN_TO_REVOKE>`
 });
 ```
 
@@ -334,7 +334,7 @@ const config = {
   issuer: '<YOUR_ISSUER_URL>',
   clientId: '<YOUR_CLIENT_ID>',
   redirectUrl: '<YOUR_REDIRECT_URL>',
-  scopes: `<YOUR_SCOPES_ARRAY>`
+  scopes: '<YOUR_SCOPES_ARRAY>'
 };
 
 // use the client to make the auth request and receive the authState
@@ -369,10 +369,13 @@ const config = {
 const authState = await authorize(config);
 
 // Refresh token
-const refreshedState = refresh({ ...config, refreshToken: authState.refreshToken });
+const refreshedState = await refresh({
+  ...config,
+  refreshToken: authState.refreshToken,
+});
 
 // Revoke token, note that Identity Server expects a client id on revoke
-await appAuth.revoke({
+await revoke({
   ...config,
   tokenToRevoke: refreshedState.refreshToken,
   sendClientId: true
@@ -395,7 +398,7 @@ const config = {
 const authState = await authorize(config);
 
 // Refresh token
-const refreshedState = appAuth.refresh({
+const refreshedState = await refresh({
   ...config,
   refreshToken: authState.refreshToken
 });
